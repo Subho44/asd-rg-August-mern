@@ -1,0 +1,6 @@
+req methode 4 types:
+
+1.post =>data insert
+2.get => all view data
+3.put => update all data
+4.delete => delete data
