@@ -10,6 +10,11 @@ const players = [
 ];
 app.use(express.json());
 
+//basic middleware
+app.use((req,res,next)=>{
+    console.log(`Request method:${req.method} , path:${req.path}`);
+    next();
+})
 //default page
 app.get('/',(req,res)=>{
     res.json(players);
@@ -21,6 +26,33 @@ app.post('/add',(req,res)=>{
     players.push(newdata);
     res.json(newdata);
 });
+//search name based
+app.get('/search',(req,res)=>{
+    const {name} = req.query;
+    if(!name) {
+        return res.status(400).json({message:"please provide a name"}); 
+    }
+    const result = players.filter(x=>x.name.toLowerCase() === name.toLowerCase());
+
+    if(result.length === 0){
+        return res.json({message:"no player found"});
+    }
+    res.json(result);
+
+});
+//dynamic routing id based search
+
+app.get('/:id',(req,res)=>{
+    const id = parseInt(req.params.id,10);
+
+    const player = players.find(x=>x.id === id);
+    res.json(player);
+})
+
+
+
+
+
 
 app.get('/about',(req,res)=>{
     res.json({message:"this is about page"});
